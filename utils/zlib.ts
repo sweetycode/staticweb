@@ -1,0 +1,34 @@
+import { b64Decode, b64Encode } from "./base64"
+
+export function string2Uint8Array(str: string): Uint8Array {
+    return new TextEncoder().encode(str)
+}
+
+export function string2ArrayBuffer(str: string): Uint8Array {
+    return string2Uint8Array(str)
+}
+
+export function arrayBuffer2String(buffer: ArrayBuffer): string {
+    return new TextDecoder().decode(buffer);
+}
+
+export async function compress(literal: string): Promise<string> {
+    const stream = new CompressionStream('deflate-raw') // 'deflate'|'gzip'|'deflate-raw'
+    const writer = stream.writable.getWriter()
+    writer.write(string2ArrayBuffer(literal))
+    writer.close()
+    const buffer = await new Response(stream.readable).arrayBuffer()
+    console.log({buffer})
+    return b64Encode(buffer)
+}
+
+export async function decompress(base64: string): Promise<string> {
+    const decoded = b64Decode(base64)
+    console.log({decoded})
+    const stream = new DecompressionStream('deflate-raw')
+    const writer = stream.writable.getWriter()
+    writer.write(decoded)
+    writer.close()
+    const buffer = await new Response(stream.readable).arrayBuffer()
+    return arrayBuffer2String(buffer)
+}
