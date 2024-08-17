@@ -60,7 +60,14 @@ const _ = {
     },
     curryRight(fn: Function, ...bindArgs: any): Function {
         return (...args) => fn(...args, ...bindArgs)
-    }
+    },
+    flip(data: {[key: string]: string}): {[key: string]: string} {
+        return Object.fromEntries(
+            Object
+              .entries(data)
+              .map(([key, value]) => [value, key])
+            );
+    },
 }
 
 

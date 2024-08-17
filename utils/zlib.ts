@@ -12,19 +12,17 @@ export function arrayBuffer2String(buffer: ArrayBuffer): string {
     return new TextDecoder().decode(buffer);
 }
 
-export async function compress(literal: string): Promise<string> {
+export async function compress(plain: string): Promise<string> {
     const stream = new CompressionStream('deflate-raw') // 'deflate'|'gzip'|'deflate-raw'
     const writer = stream.writable.getWriter()
-    writer.write(string2ArrayBuffer(literal))
+    writer.write(string2ArrayBuffer(plain))
     writer.close()
     const buffer = await new Response(stream.readable).arrayBuffer()
-    console.log({buffer})
     return b64Encode(buffer)
 }
 
 export async function decompress(base64: string): Promise<string> {
     const decoded = b64Decode(base64)
-    console.log({decoded})
     const stream = new DecompressionStream('deflate-raw')
     const writer = stream.writable.getWriter()
     writer.write(decoded)
