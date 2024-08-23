@@ -1,7 +1,10 @@
 import { dynScript, dynStyle } from "@staticweb/utils/dom"
 import { useEffect, useRef } from "preact/hooks"
 
-export function DateTimePicker({value, onChange}) {
+export function DateTimePicker({value, onChange}: {
+    value: string,
+    onChange: (newValue: string) => void,
+}) {
     const ref = useRef(null)
     const instance = useRef(null)
     useEffect(() => {

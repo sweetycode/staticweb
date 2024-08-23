@@ -117,7 +117,6 @@ function stripTrailing(s: string): {data: string, hasTrailing: boolean} {
 
 export function b64Decode(s: string): Uint8Array {
     const {data, hasTrailing} = stripTrailing(s)
-    console.log({data, hasTrailing})
 
     const quadrupleNum = Math.floor(data.length / 4)
     const roundLength = quadrupleNum * 4

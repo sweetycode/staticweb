@@ -1,4 +1,4 @@
-import type { ComponentChild, ComponentChildren } from "preact"
+import type { ComponentChildren } from "preact"
 
 export interface NavLinkItem {
     label: string

@@ -1,7 +1,7 @@
 import { b64CharAt, b64DecodeInt, b64EncodeInt, b64FindCharCode } from './base64';
 
 
-const DEBUG = (...data: any) => {}
+const DEBUG = (..._: any) => {}
 
 const VT_STRING = 0
 const VT_INTEGER = 1

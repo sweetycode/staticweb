@@ -4,7 +4,7 @@ import { useEffect, useRef } from "preact/hooks";
 
 export default function AceEditor({value='', lang='text', onChange, debounce=700, className, wrap=false}: {
     value?: string,
-    lang: 'text'|'json'|'markdown'|'html'|'csv'|'javascript',
+    lang: 'text'|'json'|'markdown'|'html'|'csv'|'javascript'|'sql',
     onChange: (value: string) => any,
     debounce?: number,
     className?: string,
@@ -20,9 +20,7 @@ export default function AceEditor({value='', lang='text', onChange, debounce=700
             const elemId = `editor-${_.autoInc()}`
             containerRef.current.id = elemId
             containerRef.current.style.fontSize = '18px'
-            editorRef.current = window['ace'].edit(elemId, {
-                mode: `ace/mode/${lang}`,
-            })
+            editorRef.current = window['ace'].edit(elemId, {})
             editorRef.current.setTheme("ace/theme/textmate");
             if (onChange) {
                 editorRef.current.session.on('change', _.debounce(() => {
@@ -52,6 +50,10 @@ export default function AceEditor({value='', lang='text', onChange, debounce=700
     useEffect(() => {
         editorRef.current && editorRef.current.session.setUseWrapMode(wrap);
     }, [wrap])
+
+    useEffect(() => {
+        editorRef.current && editorRef.current.session.setMode(`ace/mode/${lang}`)
+    }, [lang])
 
     return <div ref={containerRef} className={`${className}`}></div>
 }

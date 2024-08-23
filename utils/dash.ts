@@ -1,4 +1,5 @@
 let _autoIncVal = 0
+let _onceRemeber = new Set<string>()
 
 
 const _ = {
@@ -10,7 +11,7 @@ const _ = {
 
     debounce: (callback: Function, wait: number) => {
         let timeoutId: number|null = null;
-        return (...args) => {
+        return (...args: any[]) => {
           timeoutId && window.clearTimeout(timeoutId);
           timeoutId = window.setTimeout(() => {
             callback(...args);
@@ -40,7 +41,7 @@ const _ = {
     },
 
     camel: (str: string) => {
-        return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, function(match, chr)
+        return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, function(_, chr)
             {
                 return chr.toUpperCase();
             });
@@ -55,11 +56,11 @@ const _ = {
         }
         return hash;
     },
-    curry(fn: Function, ...bindArgs: any): Function {
-        return (...args) => fn(...bindArgs, ...args)
+    curry(fn: Function, ...bindArgs: any[]): Function {
+        return (...args: any[]) => fn(...bindArgs, ...args)
     },
     curryRight(fn: Function, ...bindArgs: any): Function {
-        return (...args) => fn(...args, ...bindArgs)
+        return (...args: any[]) => fn(...args, ...bindArgs)
     },
     flip(data: {[key: string]: string}): {[key: string]: string} {
         return Object.fromEntries(
@@ -67,6 +68,12 @@ const _ = {
               .entries(data)
               .map(([key, value]) => [value, key])
             );
+    },
+    once(key: string, fn: () => void) {
+        if (!_onceRemeber.has(key)) {
+            _onceRemeber.add(key)
+            return fn()
+        }
     },
 }
 

@@ -41,3 +41,19 @@ export function dynStyle(src: string, onLoad?: Function): Promise<any> {
     })
 }
 
+const _escListeners: (()=>void)[] = []
+
+export function addEscKeyListener(listener: () => void) {
+    _escListeners.push(listener)
+
+    _.once('esc-register', () => {
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                let listener = _escListeners.pop()
+                if (listener) {
+                    listener()
+                }
+            }
+        })
+    })
+}
